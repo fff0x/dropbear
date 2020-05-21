@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+SSH_USER=${SSH_USER:-root}
+
+if id -u "$SSH_USER" >/dev/null 2>&1; then
+  ssh_base=''
+  if [[ "$SSH_USER" = 'root' ]]; then
+    ssh_base='/root/.ssh'
+  else
+    ssh_base="/home/${SSH_USER}/.ssh"
+  fi
+
+  mkdir -p "$ssh_base"
+  chmod 700 "$ssh_base"
+
+  if [[ -s /ssh_authorized_keys ]]; then
+    cp /ssh_authorized_keys "${ssh_base}/authorized_keys"
+  fi
+
+  if [[ -n "$SSH_KEY" ]]; then
+    echo "$SSH_KEY" >> "${ssh_base}/authorized_keys"
+  fi
+
+  chmod 600 "${ssh_base}/authorized_keys"
+  chown "$SSH_USER" -R "$ssh_base"
+else
+  echo "Provided user does not exists, we are just copy the key to /tmp/${SSH_USER}.pub.."
+
+  if [[ -n "$SSH_KEY" ]]; then
+    echo "$SSH_KEY" > "/tmp/${SSH_USER}.pub"
+    chmod 666 "/tmp/${SSH_USER}.pub"
+  fi
+fi
