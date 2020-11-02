@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-set -x
-
-/usr/sbin/dropbear ${DROPBEAR_OPTIONS}

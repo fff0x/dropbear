@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# shellcheck disable=SC2086
+
+/usr/sbin/dropbear ${DROPBEAR_OPTIONS}

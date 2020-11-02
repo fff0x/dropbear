@@ -3,21 +3,20 @@
 ##
 
 ARG REGISTRY
-FROM ${REGISTRY}/base:0.0.1
+ARG BASE_ARCH
+FROM ${REGISTRY}/base${BASE_ARCH}:0.0.5
 
 ##
 ## MAIN
 ##
 
-LABEL maintainer="Max Woelfing (ff0x@this-is-fine.io)"
-LABEL name="dropbear" version="0.0.1"
+LABEL maintainer="Max Buelte <ff0x@tif.cat>"
+LABEL name="dropbear" version="0.0.2"
 LABEL description="Alpine Linux running dropbear ssh daemon"
 
 ##
 ## CONFIGURATION
 ##
-
-ARG ARCH
 
 # Dropbear args:
 # -R  Create hostkeys as required
@@ -26,9 +25,11 @@ ARG ARCH
 # -g  Disable password logins for root
 # -w  Disallow root logins
 # -F  Don't fork into background
+# -K Send keepalive packets in seconds
 # -p  Listen on Port
 
-ENV DROPBEAR_OPTIONS="-REsg -F -p 22"
+
+ENV DROPBEAR_OPTIONS="-REsg -F -K 30 -p 22"
 
 ##
 ## ROOTFS
@@ -54,4 +55,4 @@ EXPOSE 22
 ## INIT
 ##
 
-ENTRYPOINT ["/sbin/tini", "--", "/init"]
+ENTRYPOINT [ "/init/ep" ]

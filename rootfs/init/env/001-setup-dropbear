@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+
+SSH_USER="${SSH_USER:-root}"
+
+if [ "$SSH_USER" = 'root' ]; then
+  SSH_BASE='/root/.ssh'
+else
+  SSH_BASE="/home/${SSH_USER}/.ssh"
+fi
+
+if ! id -u "$SSH_USER" >/dev/null 2>&1; then
+  adduser -s /bin/ash -g users -D "$SSH_USER"
+fi
+
+mkdir -p "$SSH_BASE"
+chmod 700 "$SSH_BASE"
+
+if [ -s /ssh_authorized_keys ]; then
+  cp /ssh_authorized_keys "${SSH_BASE}/authorized_keys"
+fi
+
+if [ -n "$SSH_KEY" ]; then
+  echo "$SSH_KEY" >> "${SSH_BASE}/authorized_keys"
+fi
+
+if [ -f "${SSH_BASE}/authorized_keys" ]; then
+  chmod 600 "${SSH_BASE}/authorized_keys"
+  chown "$SSH_USER" -R "$SSH_BASE"
+fi
