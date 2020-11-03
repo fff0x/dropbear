@@ -4,19 +4,22 @@
 
 ARG REGISTRY
 ARG BASE_ARCH
-FROM ${REGISTRY}/base${BASE_ARCH}:0.0.5
+FROM ${REGISTRY}/base${BASE_ARCH}:0.0.10
 
 ##
 ## MAIN
 ##
 
 LABEL maintainer="Max Buelte <ff0x@tif.cat>"
-LABEL name="dropbear" version="0.0.2"
+LABEL name="dropbear" version="0.0.5"
 LABEL description="Alpine Linux running dropbear ssh daemon"
 
 ##
 ## CONFIGURATION
 ##
+
+ENV DAEMON_USR="root" \
+    DAEMON_GRP="root"
 
 # Dropbear args:
 # -R  Create hostkeys as required
@@ -27,7 +30,6 @@ LABEL description="Alpine Linux running dropbear ssh daemon"
 # -F  Don't fork into background
 # -K Send keepalive packets in seconds
 # -p  Listen on Port
-
 
 ENV DROPBEAR_OPTIONS="-REsg -F -K 30 -p 22"
 
@@ -46,6 +48,13 @@ RUN apk add --update --no-cache dropbear openssh-client \
 && touch /var/log/lastlog
 
 ##
+## ENVIRONMENT
+##
+
+#USER "${DAEMON_USR}"
+WORKDIR "/var/lib/${DAEMON_USR}"
+
+##
 ## PORTS
 ##
 
@@ -55,4 +64,4 @@ EXPOSE 22
 ## INIT
 ##
 
-ENTRYPOINT [ "/init/ep" ]
+ENTRYPOINT [ "/init" ]

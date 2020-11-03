@@ -35,6 +35,6 @@ clean:
 	docker volume rm ssh-hostkeys >/dev/null 2>&1 || true
 
 debug: clean
-	docker run -ti --entrypoint /bin/bash --platform linux/${DEF_ARCH} --name ${LABEL} --hostname ${LABEL}.${DOMAIN} -v ssh-hostkeys:/etc/dropbear -v ~/.ssh/id_rsa.pub:/ssh_authorized_keys --publish=3333:22 -d $(NAME)
+	docker run -ti --entrypoint /bin/sh --platform linux/${DEF_ARCH} --name ${LABEL} --hostname ${LABEL}.${DOMAIN} -v ssh-hostkeys:/etc/dropbear -v ~/.ssh/id_rsa.pub:/ssh_authorized_keys --publish=3333:22 -d $(NAME)
 	@sleep 2
-	docker exec -ti ${LABEL} /bin/bash
+	docker exec -ti ${LABEL} /bin/sh

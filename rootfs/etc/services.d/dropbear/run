@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv sh
+# shellcheck shell=sh disable=SC2086
+
+exec /usr/sbin/dropbear ${DROPBEAR_OPTIONS}
