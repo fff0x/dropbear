@@ -4,14 +4,14 @@
 
 ARG REGISTRY
 ARG BASE_ARCH
-FROM ${REGISTRY}/base${BASE_ARCH}:0.0.10
+FROM ${REGISTRY}/base${BASE_ARCH}:0.1.0
 
 ##
 ## MAIN
 ##
 
 LABEL maintainer="Max Buelte <ff0x@tif.cat>"
-LABEL name="dropbear" version="0.0.5"
+LABEL name="dropbear" version="0.0.10"
 LABEL description="Alpine Linux running dropbear ssh daemon"
 
 ##
